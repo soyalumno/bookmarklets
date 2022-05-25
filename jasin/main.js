@@ -105,7 +105,7 @@ if(!e || e.classList.contains('is-hide')) {
     f=(items) => {
       // hide-loading
       d.getElementById('loading').classList.add('is-hide')
-      setTimeout(alert, 75, `items.length : ${items.length}`)
+      setTimeout(alert, 75, `${items.length}件のデータをコピーしました`)
     };
     setTimeout(f, 500, items)
   }
