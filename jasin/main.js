@@ -61,7 +61,12 @@ function jasin() {
         var jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
         var asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
         var price = Array.from(e.querySelectorAll("div")).filter((e) => e.hasAttribute("data-postage-beacon")).map((e) => e.textContent).join("")
-        var price = e.querySelector("div[data-postage-beacon] span").textContent.replace(/,/, "")
+        var _i = null;
+        var price = Array.from(e.querySelectorAll("div[data-postage-beacon] span"))
+          .reduce((p, c, i) => {
+            if(_i || c.textContent === '円') { _i = i; return p; }
+            return c; 
+          }).textContent.replace(/,/, "").replace(/\d*%[^\d]+/, "").replace(/[^\d]+/, "").replace(/円.*/, "")
         var url = e.querySelector("div>div>a").attributes['href'].textContent
         return [jan,asin,price,url]
       })
