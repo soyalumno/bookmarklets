@@ -45,7 +45,7 @@ export default () => {
   function jasin() {
     var items = null
     if(h.match(/rakuten.co.jp/)){
-      elems = d.querySelectorAll('div.searchresultitem')
+      var elems = d.querySelectorAll('div.searchresultitem')
       items = Array.from(elems).map((e) => {
         jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
         asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
@@ -55,7 +55,7 @@ export default () => {
       })
     }
     else if(h.match(/yahoo.co.jp/)){
-      elems = d.querySelectorAll("li.LoopList__item")
+      var elems = d.querySelectorAll("li.LoopList__item")
       if(elems.length) {
         // 商品検索ページ用
         items = Array.from(elems).map((e) => {
@@ -69,7 +69,7 @@ export default () => {
       }
       else {
         // ショップページ用
-        elems = d.querySelectorAll("div.mdSearchResult li.elItem")
+        var elems = d.querySelectorAll("div.mdSearchResult li.elItem")
         items = Array.from(elems).map((e) => {
           jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
           asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
