@@ -47,10 +47,10 @@ export default () => {
     if(h.match(/rakuten.co.jp/)){
       var elems = d.querySelectorAll('div.searchresultitem')
       items = Array.from(elems).map((e) => {
-        jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
-        asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
-        price = parseInt(e.querySelector("span.important").textContent.replace(/[,|円]/, ""))
-        url = e.querySelector("div>a").attributes['href'].textContent
+        var jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
+        var asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
+        var price = parseInt(e.querySelector("span.important").textContent.replace(/[,|円]/, ""))
+        var url = e.querySelector("div>a").attributes['href'].textContent
         return [jan,asin,price,url]
       })
     }
@@ -59,11 +59,11 @@ export default () => {
       if(elems.length) {
         // 商品検索ページ用
         items = Array.from(elems).map((e) => {
-          jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
-          asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
-          price = Array.from(e.querySelectorAll("div")).filter((e) => e.hasAttribute("data-postage-beacon")).map((e) => e.textContent).join("")
+          var jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
+          var asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
+          var price = Array.from(e.querySelectorAll("div")).filter((e) => e.hasAttribute("data-postage-beacon")).map((e) => e.textContent).join("")
           price = price.replace(/,/, "").replace(/\d*%[^\d]+/, "").replace(/円.*/, "")
-          url = e.querySelector("div>div>a").attributes['href'].textContent
+          var url = e.querySelector("div>div>a").attributes['href'].textContent
           return [jan,asin,price,url]
         })
       }
@@ -71,10 +71,10 @@ export default () => {
         // ショップページ用
         var elems = d.querySelectorAll("div.mdSearchResult li.elItem")
         items = Array.from(elems).map((e) => {
-          jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
-          asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
-          price = e.querySelector("span.elPriceValue").textContent.replace(/[,|円]/g,"")
-          url = e.querySelector("a").attributes['href'].textContent
+          var jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
+          var asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
+          var price = e.querySelector("span.elPriceValue").textContent.replace(/[,|円]/g,"")
+          var url = e.querySelector("a").attributes['href'].textContent
           return [jan,asin,price,url]
         })
       }
@@ -90,13 +90,13 @@ export default () => {
       d.querySelector('head').insertAdjacentHTML('beforeend', insertCSS)
       d.querySelector('body').insertAdjacentHTML('afterbegin', insertHtml)
     }
-    items = jasin()
+    var items = jasin()
     if(items) {
       // show-loading
       d.getElementById('loading').classList.remove('is-hide')
 
       // copy
-      text = d.createElement("textarea")
+      var text = d.createElement("textarea")
       text.textContent = items.join('\n')
       d.body.appendChild(text)
       text.select()
