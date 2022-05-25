@@ -41,15 +41,72 @@ var insertCSS=`
   }
 </style>
 `
-
-var e = document.querySelector('div#loading');
-if(!e || e.classList.contains('is-hide')) {
-  function showLoading(){ document.getElementById('loading').classList.remove('is-hide') }
-  function hideLoading(){ document.getElementById('loading').classList.add('is-hide') }
-  if(!e) {
-    document.getElementsByTagName('head')[0].insertAdjacentHTML('beforeend', insertCSS);
-    document.getElementsByTagName('body')[0].insertAdjacentHTML('afterbegin', insertHtml);
+function jasin() {
+  var items = null
+  if(h.match(/rakuten.co.jp/)){
+    elems = d.querySelectorAll('div.searchresultitem')
+    items = Array.from(elems).map((e) => {
+      jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
+      asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
+      price = parseInt(e.querySelector("span.important").textContent.replace(/[,|円]/, ""))
+      url = e.querySelector("div>a").attributes['href'].textContent
+      return [jan,asin,price,url]
+    })
   }
-  showLoading();
-  setTimeout(hideLoading, 3000);
+  else if(h.match(/yahoo.co.jp/)){
+    elems = d.querySelectorAll("li.LoopList__item")
+    if(elems.length) {
+      // 商品検索ページ用
+      items = Array.from(elems).map((e) => {
+        jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
+        asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
+        price = Array.from(e.querySelectorAll("div")).filter((e) => e.hasAttribute("data-postage-beacon")).map((e) => e.textContent).join("")
+        price = price.replace(/,/, "").replace(/\d*%[^\d]+/, "").replace(/円.*/, "")
+        url = e.querySelector("div>div>a").attributes['href'].textContent
+        return [jan,asin,price,url]
+      })
+    }
+    else {
+      // ショップページ用
+      elems = d.querySelectorAll("div.mdSearchResult li.elItem")
+      items = Array.from(elems).map((e) => {
+        jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
+        asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
+        price = e.querySelector("span.elPriceValue").textContent.replace(/[,|円]/g,"")
+        url = e.querySelector("a").attributes['href'].textContent
+        return [jan,asin,price,url]
+      })
+    }
+  }
+  return items
+}
+
+var d=document,
+  h=window.location.hostname,
+  e=d.querySelector('div#loading')
+if(!e || e.classList.contains('is-hide')) {
+  if(!e) {
+    d.querySelector('head').insertAdjacentHTML('beforeend', insertCSS)
+    d.querySelector('body').insertAdjacentHTML('afterbegin', insertHtml)
+  }
+  items = jasin()
+  if(items) {
+    // show-loading
+    d.getElementById('loading').classList.remove('is-hide')
+
+    // copy
+    text = d.createElement("textarea")
+    text.textContent = items.join('\n')
+    d.body.appendChild(text)
+    text.select()
+    d.execCommand("copy")
+    d.body.removeChild(text)
+
+    f=(items) => {
+      // hide-loading
+      d.getElementById('loading').classList.add('is-hide')
+      setTimeout(alert, 75, `items.length : ${items.length}`)
+    };
+    setTimeout(f, 500, items)
+  }
 }
