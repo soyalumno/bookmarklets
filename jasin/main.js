@@ -61,7 +61,7 @@ function jasin() {
         var jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
         var asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
         var price = Array.from(e.querySelectorAll("div")).filter((e) => e.hasAttribute("data-postage-beacon")).map((e) => e.textContent).join("")
-        price = price.replace(/,/, "").replace(/\d*%[^\d]+/, "").replace(/円.*/, "")
+        var price = e.querySelector("div[data-postage-beacon] span").textContent.replace(/,/, "")
         var url = e.querySelector("div>div>a").attributes['href'].textContent
         return [jan,asin,price,url]
       })
