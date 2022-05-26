@@ -101,7 +101,11 @@ if(!e || e.classList.contains('is-hide')) {
 
     // copy
     var text = d.createElement("textarea")
-    text.textContent = items.join('\n')
+    text.textContent = items.map((item) => {
+      var [jan,asin,price,url] = [...item]
+           //    E,  F,G,     H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,  Y
+      return [asin,jan, , price, , , , , , , , , , , , , , , , ,url].join('\t')
+    }).join('\n')
     d.body.appendChild(text)
     text.select()
     d.execCommand("copy")
@@ -110,8 +114,8 @@ if(!e || e.classList.contains('is-hide')) {
     f=(items) => {
       // hide-loading
       d.getElementById('loading').classList.add('is-hide')
-      setTimeout(alert, 75, `${items.length}件のデータをコピーしました`)
+      setTimeout(alert, 50, `${items.length}件のデータをコピーしました`)
     };
-    setTimeout(f, 500, items)
+    setTimeout(f, 180, items)
   }
 }
