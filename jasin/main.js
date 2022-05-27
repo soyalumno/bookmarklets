@@ -1,12 +1,13 @@
+javascript:(function() {
 var insertHtml=`
 <!-- loading -->
-<div id="loading" class="is-hide">
-  <div class="cv-spinner">
-    <span class="spinner"></span>
+<div id='loading' class='is-hide'>
+  <div class='cv-spinner'>
+    <span class='spinner'></span>
   </div>
 </div>
 <!-- loading -->
-`
+`;
 var insertCSS=`
 <style>
   #loading{
@@ -40,46 +41,44 @@ var insertCSS=`
     display:none;
   }
 </style>
-`
+`;
 function jasin() {
-  var items = null
+  var items = null;
   if(h.match(/rakuten.co.jp/)){
-    var elems = d.querySelectorAll('div.searchresultitem')
+    var elems = d.querySelectorAll('div.searchresultitem');
     items = Array.from(elems).map((e) => {
-      var jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
-      var asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
-      var price = parseInt(e.querySelector("span.important").textContent.replace(/[,|円]/, ""))
-      var url = e.querySelector("div>a").attributes['href'].textContent
-      return [jan,asin,price,url]
+      var jan = e.querySelector('div.qs-container div.qs-jan div.qs-value').textContent;
+      var asin = e.querySelector('div.qs-container div.qs-asin div.qs-value').textContent;
+      var price = parseInt(e.querySelector('span.important').textContent.replace(/[,|円]/, ''));
+      var url = e.querySelector('div>a').attributes['href'].textContent;
+      return [jan,asin,price,url];
     })
   }
   else if(h.match(/yahoo.co.jp/)){
-    var elems = d.querySelectorAll("li.LoopList__item")
+    var elems = d.querySelectorAll('li.LoopList__item');
     if(elems.length) {
-      // 商品検索ページ用
       items = Array.from(elems).map((e) => {
-        var jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
-        var asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
-        var price = Array.from(e.querySelectorAll("div")).filter((e) => e.hasAttribute("data-postage-beacon")).map((e) => e.textContent).join("")
+        var jan = e.querySelector('div.qs-container div.qs-jan div.qs-value').textContent;
+        var asin = e.querySelector('div.qs-container div.qs-asin div.qs-value').textContent;
+        var price = Array.from(e.querySelectorAll('div')).filter((e) => e.hasAttribute('data-postage-beacon')).map((e) => e.textContent).join('');
         var _i = null;
-        var price = Array.from(e.querySelectorAll("div[data-postage-beacon] span"))
+        var price = Array.from(e.querySelectorAll('div[data-postage-beacon] span'))
           .reduce((p, c, i) => {
             if(_i || c.textContent === '円') { _i = i; return p; }
-            return c; 
-          }).textContent.replace(/,/, "").replace(/\d*%[^\d]+/, "").replace(/[^\d]+/, "").replace(/円.*/, "")
-        var url = e.querySelector("div>div>a").attributes['href'].textContent
-        return [jan,asin,price,url]
+            return c;
+          }).textContent.replace(/,/, '').replace(/\d*%[^\d]+/, '').replace(/[^\d]+/, '').replace(/円.*/, '');
+        var url = e.querySelector('div>div>a').attributes['href'].textContent;
+        return [jan,asin,price,url];
       })
     }
     else {
-      // ショップページ用
-      var elems = d.querySelectorAll("div.mdSearchResult li.elItem")
+      var elems = d.querySelectorAll('div.mdSearchResult li.elItem');
       items = Array.from(elems).map((e) => {
-        var jan = e.querySelector("div.qs-container div.qs-jan div.qs-value").textContent
-        var asin = e.querySelector("div.qs-container div.qs-asin div.qs-value").textContent
-        var price = e.querySelector("span.elPriceValue").textContent.replace(/[,|円]/g,"")
-        var url = e.querySelector("a").attributes['href'].textContent
-        return [jan,asin,price,url]
+        var jan = e.querySelector('div.qs-container div.qs-jan div.qs-value').textContent;
+        var asin = e.querySelector('div.qs-container div.qs-asin div.qs-value').textContent;
+        var price = e.querySelector('span.elPriceValue').textContent.replace(/[,|円]/g,'');
+        var url = e.querySelector('a').attributes['href'].textContent;
+        return [jan,asin,price,url];
       })
     }
   }
@@ -88,34 +87,32 @@ function jasin() {
 
 var d=document,
   h=window.location.hostname,
-  e=d.querySelector('div#loading')
+  e=d.querySelector('div#loading');
 if(!e || e.classList.contains('is-hide')) {
   if(!e) {
-    d.querySelector('head').insertAdjacentHTML('beforeend', insertCSS)
-    d.querySelector('body').insertAdjacentHTML('afterbegin', insertHtml)
+    d.querySelector('head').insertAdjacentHTML('beforeend', insertCSS);
+    d.querySelector('body').insertAdjacentHTML('afterbegin', insertHtml);
   }
-  var items = jasin()
+  var items = jasin();
   if(items) {
-    // show-loading
-    d.getElementById('loading').classList.remove('is-hide')
+    d.getElementById('loading').classList.remove('is-hide');
 
-    // copy
-    var text = d.createElement("textarea")
+    var text = d.createElement('textarea');
     text.textContent = items.map((item) => {
-      var [jan,asin,price,url] = [...item]
-           //    E,  F,G,     H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,  Y
-      return [asin,jan, , price, , , , , , , , , , , , , , , , ,url].join('\t')
-    }).join('\n')
-    d.body.appendChild(text)
-    text.select()
-    d.execCommand("copy")
-    d.body.removeChild(text)
+      var [jan,asin,price,url] = [...item];
+           /*    E,  F,G,     H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,  Y */
+      return [asin,jan, , price, , , , , , , , , , , , , , , , ,url].join('\t');
+    }).join('\n');
+    d.body.appendChild(text);
+    text.select();
+    d.execCommand('copy');
+    d.body.removeChild(text);
 
     f=(items) => {
-      // hide-loading
-      d.getElementById('loading').classList.add('is-hide')
-      setTimeout(alert, 50, `${items.length}件のデータをコピーしました`)
+      d.getElementById('loading').classList.add('is-hide');
+      setTimeout(alert, 50, `${items.length}件のデータをコピーしました`);
     };
-    setTimeout(f, 180, items)
+    setTimeout(f, 180, items);
   }
 }
+})();
