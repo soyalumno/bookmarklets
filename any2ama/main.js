@@ -59,14 +59,9 @@ else if (h.match(/tsutaya.co.jp/)) {
   tag = document.querySelector('div.tolImg a');
   s = tag.getAttribute('onclick').match(/janCd=(\d+)/)[1];
 }
-else if (h.match(/lohaco.jp/)) {
-  ts = document.querySelectorAll('table.prodSpecTable td');
-  for (let i = 0; i < ts.length; i++) {
-    if (ts[i].textContent.match(/JAN/)) {
-      s = ts[i].nextElementSibling.textContent;
-      break;
-    }
-  }
+else if (h.match(/lohaco.yahoo.jp/)) {
+  [e] = Array.from(document.querySelectorAll('div.black--text')).filter((e) => e.textContent.match(/JANコード/));
+  s = e.nextElementSibling.textContent;
 }
 else if (h.match(/askul.co.jp/)) {
   tag = document.querySelector('span.janCode');
