@@ -7,7 +7,7 @@ if (h.match(/biccamera.rakuten.co.jp/)) {
   s = location.href.match(/([0-9]+)/)[1];
 }
 else if (h.match(/rakuten.co.jp/)) {
-  s = document.getElementById('ratRanCode').value;
+  s = document.querySelector('meta[itemprop=gtin13]').content;
 }
 else if (h.match(/joshinweb.jp/)) {
   s = document.getElementsByName('SM_ID')[0].value;
